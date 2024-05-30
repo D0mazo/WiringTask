@@ -1,0 +1,61 @@
+﻿@page "/harness"
+@using Wiring.Models
+@using Wiring.Services
+@inject IGenerationService generationService
+@attribute [StreamRendering]
+@rendermode InteractiveServer
+
+<PageTitle>Harness</PageTitle>
+
+<h1>Harness</h1>
+<button @onclick="() => GenerateRandomHarness()">GENERUOTI PYNES</button>
+
+@if (harness == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Harness</th>
+                <th>Harness version</th>
+                <th>Drawing</th>
+                <th>Drawing version</th>
+                <th>Housing 1</th>
+                <th>Housing 2</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var model in harness)
+            {
+                <tr>
+                    <td>@model.Harness</td>
+                    <td>@model.Harness_version</td>
+                    <td>@model.Drawing</td>
+                    <td>@model.Drawing_version</td>
+                    <td style="@(model.Error ? "background:red" : "")">@model.Housing_1</td>
+                    <td style="@(model.Error ? "background:red" : "")">@model.Housing_2</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IEnumerable<HarnessModel>? harness;
+
+    private async Task GenerateRandomHarness()
+    {
+        // Execute the code to generate random harnesses
+        harness = await generationService.GenerateRandomHarness();
+        this.StateHasChanged();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Initially load the data
+        await GenerateRandomHarness();
+    }
+}
