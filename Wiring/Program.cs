@@ -16,9 +16,10 @@ namespace Wiring
                 .AddInteractiveServerComponents();
 
             // Register the DbContext using the connection string from the configuration
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            // Register the DbContext using in-memory database
             builder.Services.AddDbContext<DataContext>(options =>
-                options.UseSqlServer(connectionString));
+            options.UseInMemoryDatabase("InMemoryDb"));
             // Configure services.
             ConfigureServices(builder.Services);
 
@@ -31,11 +32,13 @@ namespace Wiring
             {
                 var services = scope.ServiceProvider;
                 var context = services.GetRequiredService<DataContext>();
-                context.Database.Migrate();
+                
 
                 // Call SeedData method with the harnessWires list
                 SeedData(context);
             }
+
+           
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
