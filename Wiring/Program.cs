@@ -16,7 +16,7 @@ namespace Wiring
                 .AddInteractiveServerComponents();
 
             // Register the DbContext using the connection string from the configuration
-            //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             // Register the DbContext using in-memory database
             builder.Services.AddDbContext<DataContext>(options =>
             options.UseInMemoryDatabase("InMemoryDb"));
